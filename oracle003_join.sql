@@ -49,10 +49,11 @@ SELECT /*+ ordered */ e.first_name, e.job_id, j.min_salary, j.max_salary
 from employees e, jobs j
 where e.job_id = j.job_id 
 and e.job_id = 'FI_MGR';
-
-
 /*
 선행테이블(Driving) - 후행테이블(Driven)
-
 */
 
+SELECT e.first_name, e.job_id, j.min_salary, j.max_salary
+from employees e inner join jobs j
+on e.job_id = j.job_id 
+and e.job_id = 'FI_MGR';
