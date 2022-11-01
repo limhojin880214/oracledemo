@@ -57,33 +57,58 @@ group by first_name, job_id;
 --7)업무별 평균 급여가 가장 적은  업무(job_id)를 찾아 업무(job_id)와 평균 급여를 표시하시오.
 select *
 from (
-select job_id, avg(salary)
-from employees
-group by job_id
-order by avg(salary))
+    select job_id, avg(salary)
+    from employees
+    group by job_id
+    order by avg(salary)
+    )
 where rownum = 1;
 
 					  
 --8) 각 부서의 최소 급여를 받는 사원의 이름(first_name), 급여(salary), 부서번호(department_id)를 표시하시오.
+--select  department_id, min(salary)
+--from employees
+--group by department_id;
+
 select first_name, salary, department_id
 from employees
-where salary = (
-    select department_id, salary
+where (department_id, salary) in(
+    select  department_id, min(salary)
     from employees
-    order by department_id, salary;
-);
+    group by department_id
+)
+order by department_id;
+
 
 --9)담당 업무가 프로그래머(IT_PROG)인 모든 사원보다 급여가 적으면서 
 --업무가 프로그래머(IT_PROG)가 아닌  사원들의 사원번호(employee_id), 이름(first_name), 
 --담당 업무(job_id), 급여(salary))를 출력하시오.
-           
+select employee_id, first_name, job_id, salary
+from employees
+where salary < (
+    select min(salary)
+    from employees
+    where job_id = 'IT_PROG'
+)
+order by employee_id;
 
 --10)부하직원이 없는 모든 사원의 이름을 표시하시오.
 select first_name
 from employees
-where (
+where department_id in (
+    select distinct manager_id
+    from employees
+    where manager_id is not null
 );
 
-select department_id, count(*)
-from employees
-group by department_id;
+
+
+
+
+
+
+
+
+
+
+
